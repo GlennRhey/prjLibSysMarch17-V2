@@ -1,0 +1,8 @@
+SELECT TOP (1000) [UserID]
+      ,[Username]
+      ,[PasswordHash]
+      ,[Role]
+      ,[FullName]
+      ,[Email]
+      ,[RegDate]
+  FROM [dbLibrarySystem].[dbo].[Users]

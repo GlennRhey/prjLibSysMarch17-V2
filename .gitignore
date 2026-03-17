@@ -1,0 +1,74 @@
+# Visual Studio / .NET Framework
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+bin/
+obj/
+packages/
+.vs/
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Allow essential config files
+!Web.config
+!packages.config
+!Web.Debug.config
+!Web.Release.config
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Office files
+*.docx
+*.xlsx
+*.pptx
+
+# Logs
+*.log
+*.txt
+
+# User specific files
+*.cache
+*.tmp
+*.temp
+
+# System files
+NTUSER.DAT*
+ntuser.dat*
+AppData/
+Application Data/
+Local Settings/
+My Documents/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+Downloads/
+Favorites/
+Links/
+Music/
+Pictures/
+Videos/
+Saved Games/
+Searches/
+OneDrive/
+Contacts/
+Heaven/
+Superposition/
+source/
+venv/
+*.py
+*.xml
