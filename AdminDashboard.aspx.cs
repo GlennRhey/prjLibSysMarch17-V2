@@ -18,7 +18,8 @@ namespace prjLibrarySystem
             if (role == "Super Admin") { Response.Redirect("SuperAdminDashboard.aspx"); return; }
             if (role != "Admin") { Response.Redirect("MemberDashboard.aspx"); return; }
 
-            lblAdminName.Text = "Welcome, " + (Session["FullName"] ?? Session["UserID"]).ToString();
+            litSidebar.Text = SidebarHelper.GetSidebar("Admin", "dashboard",
+                "Welcome, " + (Session["FullName"] ?? Session["UserID"]).ToString());
 
             if (!IsPostBack)
             {
@@ -39,9 +40,9 @@ namespace prjLibrarySystem
                     SELECT COUNT(*) FROM tblMembers m
                     INNER JOIN tblUsers u ON m.UserID = u.UserID WHERE u.IsActive = 1", p).Rows[0][0].ToString();
                 lblActiveLoans.Text = DatabaseHelper.ExecuteQuery(
-                    "SELECT COUNT(*) FROM tblTransactions WHERE Status = 'Active'", p).Rows[0][0].ToString();
+                    "SELECT COUNT(*) FROM tblTransactions WHERE Status IN ('Active','Overdue') AND RequestStatus='Accepted'", p).Rows[0][0].ToString();
                 lblOverdueBooks.Text = DatabaseHelper.ExecuteQuery(
-                    "SELECT COUNT(*) FROM tblTransactions WHERE Status = 'Active' AND DueDate < GETDATE()", p).Rows[0][0].ToString();
+                    "SELECT COUNT(*) FROM tblTransactions WHERE Status='Overdue'", p).Rows[0][0].ToString();
             }
             catch
             {
@@ -59,7 +60,7 @@ namespace prjLibrarySystem
                     FROM tblTransactions t
                     INNER JOIN tblMembers m ON t.MemberID = m.MemberID
                     INNER JOIN tblBooks   b ON t.ISBN     = b.ISBN
-                    WHERE t.Status = 'Active' ORDER BY t.BorrowDate DESC", new SqlParameter[0]);
+                    WHERE t.Status IN ('Active','Overdue') AND t.RequestStatus='Accepted' ORDER BY t.BorrowDate DESC", new SqlParameter[0]);
                 gvRecentLoans.DataSource = dt;
                 gvRecentLoans.DataBind();
             }

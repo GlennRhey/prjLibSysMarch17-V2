@@ -69,6 +69,15 @@ namespace prjLibrarySystem
         protected global::System.Web.UI.WebControls.DropDownList ddlLoanStatus;
 
         /// <summary>
+        /// ddlTransactionType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlTransactionType;
+
+        /// <summary>
         /// ddlDateRange control.
         /// </summary>
         /// <remarks>

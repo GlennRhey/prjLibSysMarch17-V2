@@ -74,7 +74,7 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <asp:Button ID="btnAddBook" runat="server" Text="Add New Book"
-                                CssClass="btn btn-primary" OnClientClick="showBookModal(); return false;" CausesValidation="false" />
+                                CssClass="btn btn-primary" OnClientClick="resetBookModal(); return false;" CausesValidation="false" />
                             <asp:Button ID="btnBorrowSettings" runat="server" Text="Borrow Settings"
                                 CssClass="btn btn-borrow-settings ms-2"
                                 OnClientClick="openBorrowSettings(); return false;" CausesValidation="false" />
@@ -332,6 +332,9 @@
     }
 
     function showBookModal() {
+        new bootstrap.Modal(document.getElementById('bookModal')).show();
+    }
+    function resetBookModal() {
         var f = document.getElementById('<%= txtISBN.ClientID %>');
         f.value = ''; f.disabled = false; f.readOnly = false;
         document.getElementById('<%= txtTitle.ClientID %>').value = '';
@@ -409,7 +412,7 @@
                 document.getElementById('<%= txtDescription.ClientID %>').value=book.Description||'';
                 document.getElementById('<%= hfBookId.ClientID %>').value=book.ISBN;
                 document.getElementById('<%= lblModalTitle.ClientID %>').innerText = 'Edit Book';
-                showBookModal();
+                showBookModal(); // fields already populated above
             }
         })
             .catch(function (err) { console.error(err); alert('Error loading book data'); });

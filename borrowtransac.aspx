@@ -46,22 +46,33 @@
                         <h1 class="h2">Borrow Transaction</h1>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-3 g-2 align-items-center">
+                        <div class="col-md-4">
                             <div class="input-group">
                                 <asp:TextBox ID="txtSearchLoan" runat="server" CssClass="form-control"
-                                    placeholder="Search by book title, member name, or Borrow ID..."></asp:TextBox>
+                                    placeholder="Search title, member, or Borrow ID..."></asp:TextBox>
                                 <asp:Button ID="btnSearchLoan" runat="server" Text="Search"
                                     CssClass="btn btn-outline-secondary" OnClick="btnSearchLoan_Click" UseSubmitBehavior="false" />
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <asp:DropDownList ID="ddlLoanStatus" runat="server" CssClass="form-select"
                                 AutoPostBack="true" OnSelectedIndexChanged="ddlLoanStatus_SelectedIndexChanged">
                                 <asp:ListItem Value="">All Status</asp:ListItem>
                                 <asp:ListItem Value="Active">Active</asp:ListItem>
-                                <asp:ListItem Value="Returned">Returned</asp:ListItem>
                                 <asp:ListItem Value="Overdue">Overdue</asp:ListItem>
+                                <asp:ListItem Value="Returned">Returned</asp:ListItem>
+                                <asp:ListItem Value="Cancelled">Cancelled</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+                        <div class="col-md-3">
+                            <asp:DropDownList ID="ddlTransactionType" runat="server" CssClass="form-select"
+                                AutoPostBack="true" OnSelectedIndexChanged="ddlTransactionType_SelectedIndexChanged">
+                                <asp:ListItem Value="">All Transactions</asp:ListItem>
+                                <asp:ListItem Value="PendingBorrow">Pending Borrow Requests</asp:ListItem>
+                                <asp:ListItem Value="PendingReturn">Pending Return Requests</asp:ListItem>
+                                <asp:ListItem Value="Borrow">All Borrow Records</asp:ListItem>
+                                <asp:ListItem Value="Return">All Return Records</asp:ListItem>
                             </asp:DropDownList>
                         </div>
                         <div class="col-md-3">
@@ -75,6 +86,8 @@
                             </asp:DropDownList>
                         </div>
                     </div>
+
+
 
                     <div class="card shadow">
                         <div class="card-header py-3">
@@ -95,7 +108,7 @@
                                     <asp:BoundField DataField="BorrowDate"    HeaderText="Borrow Date"  DataFormatString="{0:MM/dd/yyyy}" />
                                     <asp:BoundField DataField="DueDate"       HeaderText="Due Date"     DataFormatString="{0:MM/dd/yyyy}" />
                                     <asp:BoundField DataField="ReturnDate"    HeaderText="Return Date"  DataFormatString="{0:MM/dd/yyyy}" />
-                                    <asp:BoundField DataField="Status"        HeaderText="Status" />
+                                    <asp:BoundField DataField="DisplayStatus"    HeaderText="Status" />
                                     <asp:TemplateField HeaderText="Actions">
                                         <ItemTemplate>
                                             <div class="action-buttons">

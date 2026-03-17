@@ -29,8 +29,14 @@
             <main class="col-12 col-md-9 col-lg-10 px-md-4 main-content">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2"><i class="fas fa-clipboard-list me-2"></i>Audit Logs</h1>
-                    <asp:Button ID="btnRefresh" runat="server" Text="Refresh"
-                        CssClass="btn btn-outline-secondary btn-sm" OnClick="btnRefresh_Click" CausesValidation="false" />
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            onclick="document.getElementById('exportModal').style.display='flex'; new bootstrap.Modal(document.getElementById('exportModal')).show();">
+                            <i class="fas fa-download me-1"></i>Export
+                        </button>
+                        <asp:Button ID="btnRefresh" runat="server" Text="Refresh"
+                            CssClass="btn btn-outline-secondary btn-sm" OnClick="btnRefresh_Click" CausesValidation="false" />
+                    </div>
                 </div>
 
                 <div class="row mb-3">
@@ -79,10 +85,10 @@
                         </h6>
                         <asp:Label ID="lblCount" runat="server" CssClass="text-muted" Text=""></asp:Label>
                     </div>
-                    <div class="card-body p-0" style="position:relative; min-height:400px;">
+                    <div class="card-body p-0" style="min-height:620px;display:flex;flex-direction:column;justify-content:space-between;">
                         <asp:GridView ID="gvAuditLogs" runat="server" CssClass="table table-hover mb-0"
                             AutoGenerateColumns="false" GridLines="None" AllowPaging="true"
-                            PageSize="15" OnPageIndexChanging="gvAuditLogs_PageIndexChanging">
+                            PageSize="10" OnPageIndexChanging="gvAuditLogs_PageIndexChanging">
                             <PagerStyle CssClass="pagination" HorizontalAlign="Left" />
                             <PagerSettings Mode="NumericFirstLast" Position="Bottom" PageButtonCount="5" FirstPageText="«" LastPageText="»" />
                             <RowStyle CssClass="audit-row-hover" />
@@ -128,6 +134,32 @@
             </main>
         </div>
     </div>
+<%-- Export Modal --%>
+<div class="modal fade" id="exportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="background:linear-gradient(135deg,#1a237e,#283593);color:white;">
+                <h5 class="modal-title"><i class="fas fa-download me-2"></i>Export Audit Logs</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted small mb-3">Select the timeframe to include in the export.</p>
+                <div class="d-grid gap-2">
+                    <asp:Button ID="btnExportToday" runat="server" Text="Today" CssClass="btn btn-outline-primary"
+                        OnClick="btnExport_Click" CommandArgument="Today" CausesValidation="false" />
+                    <asp:Button ID="btnExportWeek" runat="server" Text="This Week" CssClass="btn btn-outline-primary"
+                        OnClick="btnExport_Click" CommandArgument="ThisWeek" CausesValidation="false" />
+                    <asp:Button ID="btnExportMonth" runat="server" Text="This Month" CssClass="btn btn-outline-primary"
+                        OnClick="btnExport_Click" CommandArgument="ThisMonth" CausesValidation="false" />
+                    <asp:Button ID="btnExportYear" runat="server" Text="This Year" CssClass="btn btn-outline-primary"
+                        OnClick="btnExport_Click" CommandArgument="ThisYear" CausesValidation="false" />
+                    <asp:Button ID="btnExportAll" runat="server" Text="All Time" CssClass="btn btn-primary"
+                        OnClick="btnExport_Click" CommandArgument="All" CausesValidation="false" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 <script>
     window.addEventListener('DOMContentLoaded', function () {

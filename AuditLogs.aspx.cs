@@ -74,6 +74,73 @@ namespace prjLibrarySystem
             }
         }
 
+        protected void btnExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string range = (sender as System.Web.UI.WebControls.Button)?.CommandArgument ?? "All";
+
+                string query = @"
+                    SELECT LogID, Timestamp, UserID, UserName, Action,
+                           AffectedTable, AffectedID, OldValue, NewValue
+                    FROM tblAuditLogs WHERE 1=1";
+
+                switch (range)
+                {
+                    case "Today": query += " AND CAST(Timestamp AS DATE) = CAST(GETDATE() AS DATE)"; break;
+                    case "ThisWeek": query += " AND Timestamp >= DATEADD(DAY,-7,GETDATE())"; break;
+                    case "ThisMonth": query += " AND MONTH(Timestamp)=MONTH(GETDATE()) AND YEAR(Timestamp)=YEAR(GETDATE())"; break;
+                    case "ThisYear": query += " AND YEAR(Timestamp)=YEAR(GETDATE())"; break;
+                }
+
+                query += " ORDER BY Timestamp DESC";
+
+                DataTable dt = DatabaseHelper.ExecuteQuery(query, new SqlParameter[0]);
+
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("=======================================================");
+                sb.AppendLine("         LIBRARY SYSTEM — AUDIT LOG EXPORT");
+                sb.AppendLine("=======================================================");
+                sb.AppendLine($"Exported By : {Session["FullName"] ?? Session["UserID"]}");
+                sb.AppendLine($"Exported On : {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+                sb.AppendLine($"Timeframe   : {range}");
+                sb.AppendLine($"Total Records: {dt.Rows.Count}");
+                sb.AppendLine("=======================================================");
+                sb.AppendLine();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    sb.AppendLine($"[{row["Timestamp"]:yyyy-MM-dd HH:mm:ss}] #{row["LogID"]}");
+                    sb.AppendLine($"  User      : {row["UserID"]} — {row["UserName"]}");
+                    sb.AppendLine($"  Action    : {row["Action"]}");
+                    sb.AppendLine($"  Table     : {row["AffectedTable"]}  |  Record: {row["AffectedID"]}");
+
+                    string oldVal = row["OldValue"] == DBNull.Value ? "" : row["OldValue"].ToString();
+                    string newVal = row["NewValue"] == DBNull.Value ? "" : row["NewValue"].ToString();
+                    if (!string.IsNullOrEmpty(oldVal) || !string.IsNullOrEmpty(newVal))
+                    {
+                        if (!string.IsNullOrEmpty(oldVal)) sb.AppendLine($"  Old Value : {oldVal}");
+                        if (!string.IsNullOrEmpty(newVal)) sb.AppendLine($"  New Value : {newVal}");
+                    }
+                    sb.AppendLine("-------------------------------------------------------");
+                }
+
+                string filename = $"AuditLog_{range}_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+
+                Response.Clear();
+                Response.ContentType = "text/plain";
+                Response.AppendHeader("Content-Disposition", $"attachment; filename={filename}");
+                Response.BinaryWrite(bytes);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "exportError",
+                    $"alert('Export failed: {ex.Message.Replace("'", "\\'")}');", true);
+            }
+        }
+
         protected void btnRefresh_Click(object sender, EventArgs e) { SearchTerm = ""; LoadAuditLogs(); }
 
         protected void btnSearch_Click(object sender, EventArgs e)

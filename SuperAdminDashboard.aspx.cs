@@ -13,8 +13,8 @@ namespace prjLibrarySystem
             if (Session["UserID"] == null) { Response.Redirect("Login.aspx"); return; }
             if (Session["Role"]?.ToString() != "Super Admin") { Response.Redirect("AdminDashboard.aspx"); return; }
 
-            litSidebar.Text = SidebarHelper.GetSidebar("Super Admin", "dashboard");
-            lblAdminName.Text = "Welcome, " + (Session["FullName"] ?? Session["UserID"]).ToString();
+            litSidebar.Text = SidebarHelper.GetSidebar("Super Admin", "dashboard",
+                "Welcome, " + (Session["FullName"] ?? Session["UserID"]).ToString());
 
             if (!IsPostBack) LoadStats();
         }
@@ -32,9 +32,9 @@ namespace prjLibrarySystem
                 lblTotalAdmins.Text = DatabaseHelper.ExecuteQuery(
                     "SELECT COUNT(*) FROM tblUsers WHERE Role = 'Admin' AND IsActive = 1", p).Rows[0][0].ToString();
                 lblActiveLoans.Text = DatabaseHelper.ExecuteQuery(
-                    "SELECT COUNT(*) FROM tblTransactions WHERE Status = 'Active'", p).Rows[0][0].ToString();
+                    "SELECT COUNT(*) FROM tblTransactions WHERE Status IN ('Active','Overdue') AND RequestStatus='Accepted'", p).Rows[0][0].ToString();
                 lblOverdueBooks.Text = DatabaseHelper.ExecuteQuery(
-                    "SELECT COUNT(*) FROM tblTransactions WHERE Status = 'Active' AND DueDate < GETDATE()", p).Rows[0][0].ToString();
+                    "SELECT COUNT(*) FROM tblTransactions WHERE Status='Overdue'", p).Rows[0][0].ToString();
                 lblAuditCount.Text = DatabaseHelper.ExecuteQuery(
                     "SELECT COUNT(*) FROM tblAuditLogs", p).Rows[0][0].ToString();
             }

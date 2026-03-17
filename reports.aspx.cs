@@ -38,8 +38,8 @@ namespace prjLibrarySystem
                     SELECT COUNT(*) FROM tblMembers m
                     INNER JOIN tblUsers u ON m.UserID=u.UserID
                     WHERE u.IsActive=1");
-                lblIssuedBooks.Text = GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Active' AND RequestStatus='Accepted'");
-                lblOverdueBooks.Text = GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Active' AND DueDate<GETDATE()");
+                lblIssuedBooks.Text = GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status IN ('Active','Overdue') AND RequestStatus='Accepted'");
+                lblOverdueBooks.Text = GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Overdue'");
                 lblMostBorrowed.Text = GetMostBorrowedBook();
             }
             catch (Exception ex)
@@ -78,8 +78,8 @@ namespace prjLibrarySystem
                 csv.AppendLine("Metric,Value");
                 csv.AppendLine("Total Books," + GetCount("SELECT COUNT(*) FROM tblBooks"));
                 csv.AppendLine("Total Active Members," + GetCount(@"SELECT COUNT(*) FROM tblMembers m INNER JOIN tblUsers u ON m.UserID=u.UserID WHERE u.IsActive=1"));
-                csv.AppendLine("Books Currently Active," + GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Active' AND RequestStatus='Accepted'"));
-                csv.AppendLine("Books Overdue," + GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Active' AND DueDate<GETDATE()"));
+                csv.AppendLine("Books Currently on Loan," + GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status IN ('Active','Overdue') AND RequestStatus='Accepted'"));
+                csv.AppendLine("Books Overdue," + GetCount("SELECT COUNT(*) FROM tblTransactions WHERE Status='Overdue'"));
                 csv.AppendLine("Most Borrowed Book,\"" + GetMostBorrowedBook() + "\"");
                 csv.AppendLine();
                 csv.AppendLine("Database,dbLibrarySystem");

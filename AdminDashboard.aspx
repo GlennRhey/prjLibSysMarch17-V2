@@ -7,16 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .sidebar { min-height: 100vh; background: linear-gradient(135deg, #8b0000 0%, #b11226 100%); }
         .main-content { padding: 20px; }
-        .sidebar .nav-link { color: white; padding: 15px 20px; border-radius: 0; }
-        .sidebar .nav-link:hover { background-color: rgba(255,255,255,0.1); color: white; }
-        .sidebar .nav-link.active { background: rgba(255,255,255,0.2); border-left: 4px solid white; }
         .stat-card { transition: transform 0.2s; }
         .stat-card:hover { transform: translateY(-5px); }
-        .admin-header { text-align: center; margin-bottom: 1.5rem; }
-        .admin-title { color: white; }
-        .admin-welcome { color: rgba(255,255,255,0.5); }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -25,32 +18,16 @@
 </head>
 <body>
 <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
     <div class="container-fluid">
         <div class="row">
 
-            <nav class="col-12 col-md-3 col-lg-2 d-block sidebar">
-                <div class="position-sticky pt-3">
-                    <div class="admin-header">
-                        <h4 class="admin-title">Admin Portal</h4>
-                        <small class="admin-welcome">
-                            <asp:Label ID="lblAdminName" runat="server" Text="Admin"></asp:Label>
-                        </small>
-                    </div>
-                    <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link active" href="AdminDashboard.aspx"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Books.aspx"><i class="fas fa-book me-2"></i> Books</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Members.aspx"><i class="fas fa-users me-2"></i> Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="borrowtransac.aspx"><i class="fas fa-hand-holding me-2"></i> Borrow Transaction</a></li>
-                        <li class="nav-item"><a class="nav-link" href="reports.aspx"><i class="fas fa-chart-bar me-2"></i> Reports</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Logout.aspx"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
-                    </ul>
-                </div>
-            </nav>
+            <asp:Literal ID="litSidebar" runat="server"></asp:Literal>
 
             <main class="col-12 col-md-9 col-lg-10 px-md-4 main-content">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Library Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-toolbar mb-2 mb-md-0 align-items-center gap-3">
                         <div class="btn-group me-2">
                             <div class="dropdown position-relative">
                                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
@@ -105,7 +82,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Active Loans</div>
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Currently Borrowed</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"><asp:Label ID="lblActiveLoans" runat="server" Text="0"></asp:Label></div>
                                     </div>
                                     <div class="col-auto"><i class="fas fa-hand-holding fa-2x text-gray-300"></i></div>

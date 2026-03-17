@@ -23,9 +23,8 @@
             <asp:Literal ID="litSidebar" runat="server"></asp:Literal>
 
             <main class="col-12 col-md-9 col-lg-10 px-md-4 main-content">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div class="d-flex flex-column pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Super Admin Dashboard</h1>
-                    <small class="text-muted"><asp:Label ID="lblAdminName" runat="server"></asp:Label></small>
                 </div>
 
                 <div class="row">
@@ -73,7 +72,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Active Loans</div>
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Currently Borrowed</div>
                                         <div class="h5 mb-0 font-weight-bold"><asp:Label ID="lblActiveLoans" runat="server" Text="0"></asp:Label></div>
                                     </div>
                                     <div class="col-auto"><i class="fas fa-hand-holding fa-2x text-gray-300"></i></div>

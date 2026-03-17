@@ -14,7 +14,7 @@
     /// </summary>
     public static class SidebarHelper
     {
-        public static string GetSidebar(string role, string activePage)
+        public static string GetSidebar(string role, string activePage, string welcomeName = null)
         {
             bool isSA = (role == "Super Admin");
 
@@ -26,6 +26,10 @@
                 ? "Super Admin <span style='background:#ffd54f;color:#1a237e;font-size:.7rem;" +
                   "font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;'>SA</span>"
                 : "Admin Portal";
+
+            string welcomeHtml = (activePage == "dashboard" && !string.IsNullOrEmpty(welcomeName))
+                ? $"<small style='color:rgba(255,255,255,0.6);display:block;margin-top:6px;font-size:.8rem;'>{welcomeName}</small>"
+                : "";
 
             string dashUrl = isSA ? "SuperAdminDashboard.aspx" : "AdminDashboard.aspx";
             string memUrl = isSA ? "SuperAdminMembers.aspx" : "AdminMembers.aspx";
@@ -42,6 +46,7 @@
   <div class='position-sticky pt-3'>
     <div style='text-align:center;margin-bottom:1.5rem;padding:0 10px;'>
       <h4 style='color:white;margin:0;'>{title}</h4>
+      {welcomeHtml}
     </div>
     <ul class='nav flex-column' style='padding:0;list-style:none;margin:0;'>
       {NavItem("fas fa-tachometer-alt", "Dashboard", dashUrl, activePage == "dashboard", accent)}

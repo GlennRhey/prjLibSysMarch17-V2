@@ -25,6 +25,7 @@ namespace prjLibrarySystem
 
             if (!IsPostBack)
             {
+                UpdateOverdueStatuses();
                 LoadMembersDropdown();
                 LoadAvailableBooksDropdown();
                 txtLoanDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
@@ -32,6 +33,20 @@ namespace prjLibrarySystem
                 txtReturnDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
                 LoadTransactions();
             }
+        }
+
+        private void UpdateOverdueStatuses()
+        {
+            try
+            {
+                DatabaseHelper.ExecuteNonQuery(@"
+                    UPDATE tblTransactions
+                    SET    Status = 'Overdue'
+                    WHERE  Status        = 'Active'
+                      AND  RequestStatus = 'Accepted'
+                      AND  DueDate       < CAST(GETDATE() AS DATE)");
+            }
+            catch { /* non-critical — never block page load */ }
         }
 
         private void LoadTransactions()
@@ -56,9 +71,9 @@ namespace prjLibrarySystem
                         CASE
                             WHEN t.RequestStatus = 'Pending'  THEN 'Pending Approval'
                             WHEN t.RequestStatus = 'Rejected' THEN 'Cancelled'
-                            WHEN t.Status = 'Active'          THEN 'Active'
                             WHEN t.Status = 'Returned'        THEN 'Returned'
                             WHEN t.Status = 'Overdue'         THEN 'Overdue'
+                            WHEN t.Status = 'Active'          THEN 'Active'
                             ELSE t.Status
                         END AS DisplayStatus
                     FROM  tblTransactions t
@@ -79,10 +94,20 @@ namespace prjLibrarySystem
                     switch (ddlLoanStatus.SelectedValue)
                     {
                         case "Active": query += " AND t.Status='Active' AND t.RequestStatus='Accepted'"; break;
-                        case "Returned": query += " AND t.Status='Returned'"; break;
                         case "Overdue": query += " AND t.Status='Overdue'"; break;
-                        case "Pending": query += " AND t.RequestStatus='Pending'"; break;
+                        case "Returned": query += " AND t.Status='Returned'"; break;
                         case "Cancelled": query += " AND t.RequestStatus='Rejected'"; break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(ddlTransactionType.SelectedValue))
+                {
+                    switch (ddlTransactionType.SelectedValue)
+                    {
+                        case "PendingBorrow": query += " AND t.RequestStatus='Pending' AND t.RequestType='Borrow'"; break;
+                        case "PendingReturn": query += " AND t.RequestStatus='Pending' AND t.RequestType='Return'"; break;
+                        case "Borrow": query += " AND t.RequestType='Borrow' AND t.RequestStatus!='Pending'"; break;
+                        case "Return": query += " AND t.RequestType='Return' AND t.RequestStatus!='Pending'"; break;
                     }
                 }
 
@@ -143,6 +168,7 @@ namespace prjLibrarySystem
 
         protected void btnSearchLoan_Click(object sender, EventArgs e) { LoadTransactions(); }
         protected void ddlLoanStatus_SelectedIndexChanged(object sender, EventArgs e) { LoadTransactions(); }
+        protected void ddlTransactionType_SelectedIndexChanged(object sender, EventArgs e) { LoadTransactions(); }
         protected void ddlDateRange_SelectedIndexChanged(object sender, EventArgs e) { LoadTransactions(); }
 
         protected void gvLoans_PageIndexChanging(object sender, GridViewPageEventArgs e)

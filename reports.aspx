@@ -46,7 +46,7 @@
                         <div class="col-md-6">
                             <div class="card summary-card border-warning">
                                 <div class="card-body">
-                                    <span>Books Currently Issued</span>
+                                    <span>Currently Borrowed</span>
                                     <asp:Label ID="lblIssuedBooks" runat="server" Text="0" CssClass="badge bg-dark"></asp:Label>
                                 </div>
                             </div>

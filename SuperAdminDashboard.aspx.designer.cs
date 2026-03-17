@@ -42,15 +42,6 @@ namespace prjLibrarySystem
         protected global::System.Web.UI.WebControls.Literal litSidebar;
 
         /// <summary>
-        /// lblAdminName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAdminName;
-
-        /// <summary>
         /// lblTotalBooks control.
         /// </summary>
         /// <remarks>
